@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customizable Fundraising Poster</title>
+    <style>
+        /* Add your custom styling here */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: aquamarine;
+        }
+        .poster-container {
+            position: relative;
+            width: 500px;
+            margin: auto;
+        }
+        .poster {
+            width: 100%;
+            height: auto;
+        }
+        #uploadedImage {
+            position: absolute;
+            top: 180px; /* Adjust based on where the photo is positioned */
+            left: 175px; /* Adjust this for centering the image */
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        #downloadBtn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="poster-container">
+            <img src="path_to_default_poster_image.png" alt="Fundraising Poster" class="poster" id="posterImage">
+        <img id="uploadedImage" src="" alt="Uploaded Image" style="display:none;">
+    </div>
+
+    <input type="file" id="imageUpload" accept="image/*">
+    <button id="downloadBtn">Download Poster</button>
+
+    <script>
+        const imageUpload = document.getElementById('imageUpload');
+        const uploadedImage = document.getElementById('uploadedImage');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const posterContainer = document.querySelector('.poster-container');
+
+        imageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                uploadedImage.src = e.target.result;
+                uploadedImage.style.display = 'block';
+            }
+
+            reader.readAsDataURL(file);
+        });
+
+        downloadBtn.addEventListener('click', function() {
+            html2canvas(posterContainer).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'custom_poster.png';
+                link.click();
+            });
+        });
+    </script>
+    <!-- Include html2canvas library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+</body>
+</html>
